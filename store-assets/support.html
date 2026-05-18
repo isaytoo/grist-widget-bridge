@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Aide — Grist Widget Bridge</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #0f172a; color: #e2e8f0;
+      line-height: 1.6; padding: 0;
+    }
+    header {
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      border-bottom: 1px solid rgba(255,255,255,.08);
+      padding: 28px 40px;
+      display: flex; align-items: center; gap: 16px;
+    }
+    .logo {
+      width: 48px; height: 48px; border-radius: 12px;
+      background: #16b378;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 22px; color: #fff;
+      flex-shrink: 0;
+      box-shadow: 0 6px 20px rgba(22,179,120,.35);
+    }
+    .brand { font-size: 20px; font-weight: 700; color: #fff; }
+    .brand span { font-size: 13px; font-weight: 400; color: #94a3b8; margin-left: 10px; }
+
+    main { max-width: 760px; margin: 0 auto; padding: 48px 24px 80px; }
+
+    h1 { font-size: 32px; font-weight: 800; color: #fff; margin-bottom: 8px; }
+    .lead { font-size: 16px; color: #94a3b8; margin-bottom: 48px; }
+
+    h2 {
+      font-size: 18px; font-weight: 700; color: #fff;
+      margin: 40px 0 12px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    h2::before {
+      content: ''; display: inline-block;
+      width: 4px; height: 20px; border-radius: 2px;
+      background: #16b378;
+    }
+
+    p { color: #cbd5e1; margin-bottom: 12px; }
+    p b { color: #fff; }
+
+    ol, ul { padding-left: 20px; color: #cbd5e1; }
+    li { margin-bottom: 8px; }
+    li b { color: #fff; }
+
+    code {
+      background: rgba(255,255,255,.08); color: #4ade80;
+      padding: 2px 7px; border-radius: 4px;
+      font-family: ui-monospace, monospace; font-size: 13px;
+    }
+
+    .card {
+      background: rgba(255,255,255,.04);
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 14px;
+      padding: 20px 24px;
+      margin: 16px 0;
+    }
+    .card.green { border-color: rgba(22,179,120,.3); background: rgba(22,179,120,.06); }
+    .card.warm  { border-color: rgba(249,115,22,.3);  background: rgba(249,115,22,.06); }
+
+    .step-list { list-style: none; padding: 0; }
+    .step-list li {
+      display: flex; gap: 14px; align-items: flex-start;
+      padding: 14px 0; border-bottom: 1px solid rgba(255,255,255,.06);
+    }
+    .step-list li:last-child { border-bottom: none; }
+    .num {
+      width: 28px; height: 28px; border-radius: 50%;
+      background: rgba(22,179,120,.2); color: #4ade80;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 13px; flex-shrink: 0; margin-top: 1px;
+    }
+
+    .faq-item { margin-bottom: 24px; }
+    .faq-q { font-weight: 600; color: #fff; margin-bottom: 6px; }
+    .faq-a { color: #94a3b8; }
+
+    footer {
+      text-align: center; padding: 32px;
+      border-top: 1px solid rgba(255,255,255,.06);
+      font-size: 13px; color: #475569;
+    }
+    footer a { color: #16b378; text-decoration: none; }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo">G</div>
+  <div>
+    <div class="brand">Grist Widget Bridge <span>v2.0</span></div>
+  </div>
+</header>
+
+<main>
+  <h1>Aide &amp; Support</h1>
+  <p class="lead">Tout ce qu'il faut savoir pour installer, configurer et dépanner l'extension.</p>
+
+  <h2>Installation rapide</h2>
+  <ul class="step-list">
+    <li><div class="num">1</div><div>Installez l'extension depuis le <b>Chrome Web Store</b>.</div></li>
+    <li><div class="num">2</div><div>Ouvrez votre <b>page Grist</b> dans un onglet → cliquez l'icône de l'extension → <b>« + Comme instance Grist »</b>.</div></li>
+    <li><div class="num">3</div><div>Ouvrez la <b>page de votre widget</b> dans un onglet → cliquez l'icône → <b>« + Comme widget »</b>.</div></li>
+    <li><div class="num">4</div><div>Rechargez les onglets concernés. L'extension est active.</div></li>
+  </ul>
+
+  <h2>Ce que fait l'extension</h2>
+  <p>Elle corrige deux problèmes courants des widgets personnalisés Grist hébergés sur un domaine externe :</p>
+  <div class="card green">
+    <p><b>✅ CORS sur l'API Grist</b> — l'upload de pièces jointes depuis le widget fonctionne via un pont <code>postMessage</code> injecté dans la page Grist (même origine que l'API).</p>
+  </div>
+  <div class="card green">
+    <p><b>✅ localStorage bloqué</b> — l'extension corrige la <code>DOMException "The operation is insecure"</code> via un proxy transparent vers <code>chrome.storage</code>.</p>
+  </div>
+
+  <h2>Configuration avancée</h2>
+  <p>Clic-droit sur l'icône → <b>Options</b>, ou bouton ⚙ dans le popup. Vous pouvez :</p>
+  <ul>
+    <li>Ajouter / supprimer des instances Grist</li>
+    <li>Ajouter / supprimer des domaines de widgets (wildcards <code>/*</code> supportés)</li>
+    <li>Réinitialiser la configuration par défaut</li>
+  </ul>
+
+  <h2>Questions fréquentes</h2>
+
+  <div class="faq-item">
+    <div class="faq-q">Le popup indique « Aucune règle » sur ma page Grist — que faire ?</div>
+    <div class="faq-a">Cliquez <b>« + Comme instance Grist »</b> dans le popup, puis rechargez l'onglet. Si c'est déjà fait, vérifiez que l'URL de votre Grist correspond bien à celle listée dans les options (sans slash final).</div>
+  </div>
+
+  <div class="faq-item">
+    <div class="faq-q">L'upload de pièces jointes ne fonctionne toujours pas.</div>
+    <div class="faq-a">Assurez-vous que : (1) la page Grist est bien configurée comme instance, (2) la page widget est bien configurée comme widget, (3) vous êtes connecté à votre Grist (la session cookie doit être active). Rechargez les deux onglets après toute modification de config.</div>
+  </div>
+
+  <div class="faq-item">
+    <div class="faq-q">L'extension ralentit-elle mon navigateur ?</div>
+    <div class="faq-a">Non. Elle ne s'active <b>que</b> sur les URLs que vous avez explicitement configurées. Sur tous les autres sites, elle est inactive.</div>
+  </div>
+
+  <div class="faq-item">
+    <div class="faq-q">Fonctionne-t-elle avec Edge ou Brave ?</div>
+    <div class="faq-a">Oui — tout navigateur Chromium (Chrome, Edge, Brave, Opera) est compatible avec les extensions Chrome Web Store.</div>
+  </div>
+
+  <div class="faq-item">
+    <div class="faq-q">Mes données sont-elles envoyées quelque part ?</div>
+    <div class="faq-a">Non. L'extension ne contacte aucun serveur tiers. Seules vos listes d'URLs sont stockées localement via <code>chrome.storage.sync</code>. Voir notre <a href="privacy.html">politique de confidentialité</a>.</div>
+  </div>
+
+  <div class="faq-item">
+    <div class="faq-q">Comment désinstaller l'extension ?</div>
+    <div class="faq-a">Rendez-vous sur <code>chrome://extensions</code> → bouton <b>Supprimer</b> à côté de Grist Widget Bridge.</div>
+  </div>
+
+  <h2>Contact</h2>
+  <div class="card">
+    <p>Pour toute question ou bug, contactez-nous via l'email indiqué sur la fiche Chrome Web Store, ou via <a href="https://www.gristup.fr" style="color:#16b378">gristup.fr</a>.</p>
+  </div>
+
+</main>
+
+<footer>
+  Grist Widget Bridge · <a href="privacy.html">Politique de confidentialité</a> · <a href="https://www.gristup.fr">gristup.fr</a>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Politique de confidentialité — Grist Widget Bridge</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #0f172a; color: #e2e8f0;
+      line-height: 1.6;
+    }
+    header {
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      border-bottom: 1px solid rgba(255,255,255,.08);
+      padding: 28px 40px;
+      display: flex; align-items: center; gap: 16px;
+    }
+    .logo {
+      width: 48px; height: 48px; border-radius: 12px;
+      background: #16b378;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 22px; color: #fff;
+      flex-shrink: 0;
+      box-shadow: 0 6px 20px rgba(22,179,120,.35);
+    }
+    .brand { font-size: 20px; font-weight: 700; color: #fff; }
+    .brand span { font-size: 13px; font-weight: 400; color: #94a3b8; margin-left: 10px; }
+
+    main { max-width: 760px; margin: 0 auto; padding: 48px 24px 80px; }
+
+    h1 { font-size: 32px; font-weight: 800; color: #fff; margin-bottom: 8px; }
+    .date { font-size: 13px; color: #475569; margin-bottom: 40px; }
+
+    .summary {
+      background: rgba(22,179,120,.08);
+      border: 1px solid rgba(22,179,120,.25);
+      border-radius: 12px;
+      padding: 18px 22px;
+      margin-bottom: 40px;
+      font-size: 15px; color: #4ade80; font-weight: 600;
+    }
+
+    h2 {
+      font-size: 18px; font-weight: 700; color: #fff;
+      margin: 36px 0 10px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    h2::before {
+      content: ''; display: inline-block;
+      width: 4px; height: 20px; border-radius: 2px;
+      background: #16b378;
+    }
+
+    p { color: #cbd5e1; margin-bottom: 10px; }
+    p b { color: #fff; }
+
+    ul { padding-left: 20px; color: #cbd5e1; margin-bottom: 12px; }
+    li { margin-bottom: 6px; }
+
+    code {
+      background: rgba(255,255,255,.08); color: #4ade80;
+      padding: 2px 7px; border-radius: 4px;
+      font-family: ui-monospace, monospace; font-size: 13px;
+    }
+
+    table {
+      width: 100%; border-collapse: collapse; margin: 12px 0;
+      font-size: 13px;
+    }
+    th {
+      text-align: left; padding: 10px 14px;
+      background: rgba(255,255,255,.06);
+      color: #94a3b8; font-weight: 600;
+      border-bottom: 1px solid rgba(255,255,255,.1);
+    }
+    td {
+      padding: 10px 14px;
+      border-bottom: 1px solid rgba(255,255,255,.05);
+      color: #cbd5e1; vertical-align: top;
+    }
+    td:first-child { color: #4ade80; font-family: ui-monospace, monospace; white-space: nowrap; }
+
+    footer {
+      text-align: center; padding: 32px;
+      border-top: 1px solid rgba(255,255,255,.06);
+      font-size: 13px; color: #475569;
+    }
+    footer a { color: #16b378; text-decoration: none; }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo">G</div>
+  <div>
+    <div class="brand">Grist Widget Bridge <span>v2.0</span></div>
+  </div>
+</header>
+
+<main>
+  <h1>Politique de confidentialité</h1>
+  <p class="date">Dernière mise à jour : 5 mai 2026</p>
+
+  <div class="summary">
+    ✅ Cette extension ne collecte, ne stocke et n'envoie aucune donnée personnelle à un quelconque serveur tiers.
+  </div>
+
+  <h2>Données stockées localement</h2>
+  <p>L'extension stocke uniquement deux listes d'URLs configurées par l'utilisateur :</p>
+  <ul>
+    <li><code>gristUrls</code> — la liste de vos serveurs Grist</li>
+    <li><code>widgetUrls</code> — la liste de vos domaines de widgets autorisés</li>
+  </ul>
+  <p>Ces données sont enregistrées via <code>chrome.storage.sync</code> et peuvent être synchronisées entre vos appareils via votre compte Google si la synchronisation Chrome est activée. Elles ne quittent jamais votre navigateur ni le service de synchronisation Google.</p>
+
+  <h2>Données traitées en mémoire (non stockées)</h2>
+  <p>Lors d'un upload de pièce jointe depuis un widget :</p>
+  <ul>
+    <li>Les fichiers transitent en mémoire avant d'être envoyés à l'API Grist via la session authentifiée du navigateur (cookies)</li>
+    <li>Aucun fichier n'est transmis à un serveur tiers</li>
+    <li>Aucun contenu de message <code>postMessage</code> n'est enregistré</li>
+  </ul>
+
+  <h2>Permissions et leur usage</h2>
+  <table>
+    <thead>
+      <tr><th>Permission</th><th>Usage</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>storage</td><td>Sauvegarde des listes d'URLs configurées</td></tr>
+      <tr><td>tabs, activeTab</td><td>Lecture de l'URL de l'onglet actif depuis le popup pour proposer l'ajout en un clic</td></tr>
+      <tr><td>scripting</td><td>Injection des scripts de pont (bridge &amp; proxy localStorage) sur les seules URLs configurées</td></tr>
+      <tr><td>declarativeNetRequest*</td><td>Ajout d'en-têtes CORS et <code>Origin-Agent-Cluster</code> sur les URLs configurées. Aucune requête n'est bloquée ou redirigée.</td></tr>
+      <tr><td>host_permissions: &lt;all_urls&gt;</td><td>Permet de supporter n'importe quelle instance Grist auto-hébergée. L'extension n'agit que sur les URLs explicitement ajoutées par l'utilisateur.</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Cookies</h2>
+  <p>L'extension n'écrit ni ne lit directement aucun cookie. Lors d'un upload, les requêtes vers votre serveur Grist incluent automatiquement les cookies de session déjà présents dans votre navigateur (<code>credentials: 'include'</code>), exactement comme le ferait n'importe quel onglet de votre navigateur.</p>
+
+  <h2>Tiers</h2>
+  <p>L'extension ne contacte <b>aucun service tiers</b>. Toutes les communications sont :</p>
+  <ul>
+    <li>Locales (entre l'iframe widget et le contexte parent Grist)</li>
+    <li>Vers votre propre serveur Grist (uniquement pour les uploads d'attachement)</li>
+  </ul>
+  <p>Aucune analytics, aucun tracking, aucune télémétrie.</p>
+
+  <h2>Mises à jour</h2>
+  <p>Toute modification matérielle de cette politique fera l'objet d'une nouvelle version de l'extension publiée sur le Chrome Web Store avec une note dans le changelog.</p>
+
+  <h2>Contact</h2>
+  <p>Pour toute question relative à la confidentialité, contactez l'auteur via l'email indiqué sur la fiche Chrome Web Store ou via <a href="https://www.gristup.fr" style="color:#16b378">gristup.fr</a>.</p>
+
+  <h2>Code source</h2>
+  <p>Le code source est entièrement lisible. Vous pouvez vérifier chacune de ces affirmations en lisant les fichiers <code>background.js</code>, <code>popup.js</code>, <code>grist-host-bridge.js</code>, <code>content-script.js</code> et <code>options.js</code> de l'extension.</p>
+
+</main>
+
+<footer>
+  Grist Widget Bridge · <a href="support.html">Aide</a> · <a href="https://www.gristup.fr">gristup.fr</a>
+</footer>
+
+</body>
+</html>

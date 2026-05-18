@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Screenshot 4 — Comment ça marche</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      width: 1280px; height: 800px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      color: #fff;
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      padding: 60px;
+      overflow: hidden;
+      display: flex; flex-direction: column;
+    }
+
+    .bg-circle { position: absolute; border-radius: 50%; opacity: .08; filter: blur(2px); }
+    .bg-1 { width: 700px; height: 700px; background: #16b378; top: -250px; right: -200px; }
+    .bg-2 { width: 500px; height: 500px; background: #f97316; bottom: -200px; left: -150px; }
+
+    .hero {
+      text-align: center; margin-bottom: 50px; position: relative; z-index: 1;
+    }
+    h1 {
+      font-size: 44px; font-weight: 800; margin-bottom: 12px;
+    }
+    .accent { background: linear-gradient(135deg, #16b378, #4ade80);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .lead {
+      font-size: 18px; color: #cbd5e1; max-width: 720px; margin: 0 auto;
+      line-height: 1.5;
+    }
+
+    .diagram {
+      display: flex; align-items: center; justify-content: center;
+      gap: 24px; position: relative; z-index: 1;
+      margin-bottom: 50px;
+    }
+
+    .box {
+      width: 240px; padding: 20px;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.04);
+      text-align: center;
+    }
+    .box.widget { border-color: rgba(249,115,22,.4); background: rgba(249,115,22,.08); }
+    .box.bridge { border-color: rgba(96,165,250,.4); background: rgba(96,165,250,.08); }
+    .box.grist  { border-color: rgba(22,179,120,.4); background: rgba(22,179,120,.08); }
+
+    .box-icon {
+      width: 50px; height: 50px; border-radius: 12px;
+      margin: 0 auto 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 24px;
+    }
+    .box.widget .box-icon { background: rgba(249,115,22,.2); }
+    .box.bridge .box-icon { background: rgba(96,165,250,.2); }
+    .box.grist  .box-icon { background: rgba(22,179,120,.2); }
+
+    .box-title { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
+    .box-host  { font-size: 11px; color: #94a3b8; font-family: ui-monospace, monospace; margin-bottom: 8px; }
+    .box-desc  { font-size: 12px; color: #cbd5e1; line-height: 1.4; }
+
+    .arrow {
+      display: flex; flex-direction: column; align-items: center; gap: 6px;
+      flex-shrink: 0;
+    }
+    .arrow-line {
+      width: 70px; height: 2px;
+      background: linear-gradient(90deg, #f97316, #60a5fa);
+      position: relative;
+    }
+    .arrow-line::after {
+      content: ''; position: absolute; right: -1px; top: -3px;
+      width: 0; height: 0;
+      border-left: 6px solid #60a5fa;
+      border-top: 4px solid transparent;
+      border-bottom: 4px solid transparent;
+    }
+    .arrow-line.green {
+      background: linear-gradient(90deg, #60a5fa, #16b378);
+    }
+    .arrow-line.green::after { border-left-color: #16b378; }
+    .arrow-label {
+      font-size: 11px; color: #94a3b8;
+      font-family: ui-monospace, monospace;
+    }
+
+    .points { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; position: relative; z-index: 1; }
+    .point {
+      background: rgba(255,255,255,.04);
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 12px;
+      padding: 16px 18px;
+      display: flex; gap: 12px; align-items: flex-start;
+    }
+    .point-icon {
+      width: 36px; height: 36px; border-radius: 9px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px; flex-shrink: 0;
+    }
+    .point-icon.green { background: rgba(22,179,120,.2); color: #4ade80; }
+    .point-icon.warm  { background: rgba(249,115,22,.2); color: #fb923c; }
+    .point-icon.blue  { background: rgba(96,165,250,.2); color: #93c5fd; }
+    .point-title { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+    .point-text  { font-size: 12px; color: #94a3b8; line-height: 1.5; }
+  </style>
+</head>
+<body>
+  <div class="bg-circle bg-1"></div>
+  <div class="bg-circle bg-2"></div>
+
+  <div class="hero">
+    <h1>Le pont qui <span class="accent">contourne CORS</span></h1>
+    <p class="lead">L'extension injecte un script dans la page Grist (même origine que l'API) qui relaie les requêtes du widget. Aucun blocage CORS, aucun token à gérer.</p>
+  </div>
+
+  <div class="diagram">
+    <div class="box widget">
+      <div class="box-icon">🧩</div>
+      <div class="box-title">Widget</div>
+      <div class="box-host">isaytoo.github.io</div>
+      <div class="box-desc">Votre code de widget dans une iframe</div>
+    </div>
+
+    <div class="arrow">
+      <div class="arrow-line"></div>
+      <div class="arrow-label">postMessage</div>
+    </div>
+
+    <div class="box bridge">
+      <div class="box-icon">🌉</div>
+      <div class="box-title">Bridge</div>
+      <div class="box-host">grist-host-bridge.js</div>
+      <div class="box-desc">Injecté par l'extension dans la page Grist</div>
+    </div>
+
+    <div class="arrow">
+      <div class="arrow-line green"></div>
+      <div class="arrow-label">fetch (same-origin)</div>
+    </div>
+
+    <div class="box grist">
+      <div class="box-icon">📊</div>
+      <div class="box-title">API Grist</div>
+      <div class="box-host">grist.example.org/api/*</div>
+      <div class="box-desc">Authentifié via votre cookie de session</div>
+    </div>
+  </div>
+
+  <div class="points">
+    <div class="point">
+      <div class="point-icon green">✓</div>
+      <div>
+        <div class="point-title">Zéro CORS</div>
+        <div class="point-text">Le bridge tourne sur l'origine Grist : la requête API est same-origin.</div>
+      </div>
+    </div>
+    <div class="point">
+      <div class="point-icon warm">✓</div>
+      <div>
+        <div class="point-title">Zéro API key</div>
+        <div class="point-text">L'authentification se fait via votre cookie de session déjà actif.</div>
+      </div>
+    </div>
+    <div class="point">
+      <div class="point-icon blue">✓</div>
+      <div>
+        <div class="point-title">localStorage corrigé</div>
+        <div class="point-text">Un proxy transparent bascule sur chrome.storage si le navigateur bloque.</div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

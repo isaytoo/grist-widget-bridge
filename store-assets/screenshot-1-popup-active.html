@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Screenshot 1 — Popup actif sur une page Grist</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      width: 1280px; height: 800px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #f1f5f9;
+      overflow: hidden; position: relative;
+    }
+
+    /* ── Faux navigateur Chrome ─────────────── */
+    .chrome { width: 100%; height: 100%; background: #fff; display: flex; flex-direction: column; }
+    .chrome-bar {
+      height: 40px; background: #e8eaed;
+      display: flex; align-items: center; gap: 8px;
+      padding: 0 14px; border-bottom: 1px solid #d1d5db;
+    }
+    .chrome-dot { width: 12px; height: 12px; border-radius: 50%; }
+    .chrome-dot.r { background: #ff5f57; }
+    .chrome-dot.y { background: #febc2e; }
+    .chrome-dot.g { background: #28c840; }
+    .url-bar {
+      flex: 1; margin: 0 12px;
+      height: 26px; background: #fff;
+      border-radius: 13px;
+      display: flex; align-items: center;
+      padding: 0 14px;
+      font-size: 12px; color: #5f6368;
+      font-family: -apple-system, sans-serif;
+    }
+    .lock { color: #5f6368; font-size: 12px; margin-right: 6px; }
+    .ext-icon-btn {
+      width: 28px; height: 28px; border-radius: 50%;
+      background: #16b378;
+      display: flex; align-items: center; justify-content: center;
+      color: #fff; font-weight: 700; font-size: 14px;
+      box-shadow: 0 0 0 3px rgba(22,179,120,.25);
+    }
+
+    /* ── Page Grist factice (silhouette) ──────── */
+    .page { flex: 1; display: flex; }
+    .sidebar {
+      width: 240px; background: #fafaf8;
+      border-right: 1px solid #e8e8e4;
+      padding: 18px;
+    }
+    .sb-org {
+      display: flex; align-items: center; gap: 10px;
+      padding: 8px 10px;
+      background: #fff; border: 1px solid #e8e8e4; border-radius: 8px;
+      margin-bottom: 20px;
+    }
+    .sb-org-logo {
+      width: 22px; height: 22px; border-radius: 50%;
+      background: #16b378; color: #fff;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px; font-weight: 700;
+    }
+    .sb-org-name { font-size: 13px; color: #2c2c2a; font-weight: 500; }
+
+    .sb-btn {
+      width: 100%; padding: 10px;
+      background: #16b378; color: #fff;
+      border-radius: 8px; font-weight: 600; font-size: 13px;
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 16px;
+    }
+    .sb-btn-plus {
+      width: 22px; height: 22px; border-radius: 50%;
+      background: rgba(255,255,255,.25);
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700;
+    }
+
+    .sb-item {
+      display: flex; align-items: center; gap: 10px;
+      padding: 8px 10px; border-radius: 6px;
+      font-size: 13px; color: #2c2c2a;
+      margin-bottom: 2px;
+    }
+    .sb-item.active { background: #f0fdf8; color: #0f8a5b; font-weight: 500; }
+    .sb-emoji { font-size: 14px; }
+
+    .main { flex: 1; padding: 28px 32px; overflow: hidden; }
+    .breadcrumb { font-size: 13px; color: #71706b; margin-bottom: 18px; }
+    .breadcrumb b { color: #2c2c2a; font-weight: 500; }
+    .doc-title { font-size: 28px; font-weight: 700; color: #2c2c2a; display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
+    .doc-sub { font-size: 14px; color: #71706b; margin-bottom: 24px; }
+
+    .tabs { display: flex; gap: 6px; margin-bottom: 22px; border-bottom: 1px solid #e8e8e4; padding-bottom: 0; }
+    .tab {
+      padding: 9px 14px; font-size: 13px; color: #71706b;
+      border-bottom: 2px solid transparent;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .tab.active { color: #16b378; border-bottom-color: #16b378; font-weight: 600; }
+
+    .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 26px; }
+    .stat {
+      background: #fff; border: 1px solid #e8e8e4;
+      border-radius: 10px; padding: 16px;
+      display: flex; justify-content: space-between; align-items: flex-start;
+    }
+    .stat-label { font-size: 12px; color: #71706b; margin-bottom: 4px; }
+    .stat-value { font-size: 26px; font-weight: 700; color: #2c2c2a; }
+    .stat-emoji { font-size: 22px; opacity: .6; }
+
+    .calendar-stub {
+      background: #fff; border: 1px solid #e8e8e4; border-radius: 10px;
+      padding: 24px; height: 240px;
+      display: flex; align-items: center; justify-content: center;
+      color: #cbd5e1; font-size: 14px;
+    }
+
+    /* ── Popup overlay ───────────────────────────── */
+    .popup-anchor {
+      position: absolute; top: 50px; right: 18px;
+      z-index: 100;
+    }
+    .popup-arrow {
+      position: absolute; top: -8px; right: 18px;
+      width: 16px; height: 16px;
+      background: #16213e; transform: rotate(45deg);
+      border-left: 1px solid rgba(255,255,255,.1);
+      border-top: 1px solid rgba(255,255,255,.1);
+    }
+    .popup {
+      width: 340px;
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+      border-radius: 12px;
+      padding: 18px;
+      color: #fff;
+      box-shadow: 0 25px 60px rgba(0,0,0,.35);
+      border: 1px solid rgba(255,255,255,.08);
+    }
+
+    .pop-header { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+    .pop-logo {
+      width: 40px; height: 40px;
+      background: #16b378; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 18px;
+    }
+    .pop-title { font-size: 16px; font-weight: 600; }
+    .pop-sub   { font-size: 11px; color: #94a3b8; }
+
+    .status-card {
+      background: rgba(255,255,255,.05);
+      border: 1px solid rgba(255,255,255,.1);
+      border-radius: 12px;
+      padding: 14px;
+      margin-bottom: 14px;
+    }
+    .status-line { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+    .status-dot { width: 10px; height: 10px; border-radius: 50%; background: #16b378; box-shadow: 0 0 8px #16b378; }
+    .status-text { font-size: 13px; font-weight: 500; }
+    .status-url { font-size: 11px; color: #94a3b8; font-family: ui-monospace, monospace; word-break: break-all; line-height: 1.4; margin-top: 4px; }
+
+    .btn-secondary {
+      width: 100%;
+      background: rgba(255,255,255,.08); color: #fff;
+      border-radius: 10px; padding: 10px 12px;
+      font-size: 13px; font-weight: 600;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .section-title {
+      font-size: 10px; font-weight: 600; text-transform: uppercase;
+      letter-spacing: .08em; color: #94a3b8; margin: 4px 0 8px;
+    }
+
+    .url-list { display: flex; flex-direction: column; gap: 6px; }
+    .url-item {
+      display: flex; align-items: center; gap: 8px;
+      background: rgba(255,255,255,.04);
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 8px;
+      padding: 7px 10px;
+      font-size: 11px;
+      font-family: ui-monospace, monospace;
+    }
+    .url-item.grist  { border-color: rgba(22,179,120,.35); }
+    .url-item.widget { border-color: rgba(249,115,22,.35); }
+    .url-item .badge {
+      font-size: 9px; font-weight: 700; padding: 2px 6px;
+      border-radius: 4px; text-transform: uppercase; letter-spacing: .04em;
+    }
+    .url-item.grist  .badge { background: rgba(22,179,120,.2);  color: #4ade80; }
+    .url-item.widget .badge { background: rgba(249,115,22,.2);  color: #fb923c; }
+    .url-item .u { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: #e2e8f0; }
+    .url-item .x { color: #64748b; font-size: 14px; padding: 0 2px; }
+
+    .footer-row {
+      margin-top: 14px; padding-top: 12px;
+      border-top: 1px solid rgba(255,255,255,.08);
+      display: flex; gap: 8px;
+    }
+    .ghost {
+      flex: 1; padding: 8px;
+      background: transparent; color: #94a3b8;
+      font-weight: 500; font-size: 12px;
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center; gap: 6px;
+    }
+    .version {
+      margin-top: 8px; text-align: center;
+      font-size: 10px; color: #64748b;
+    }
+
+    /* Highlight callout */
+    .callout {
+      position: absolute; top: 250px; right: 380px; z-index: 50;
+      background: #16b378; color: #fff;
+      padding: 10px 18px; border-radius: 30px;
+      font-size: 14px; font-weight: 600;
+      box-shadow: 0 12px 30px rgba(22,179,120,.4);
+    }
+    .callout::after {
+      content: ''; position: absolute;
+      top: 50%; right: -7px; transform: translateY(-50%) rotate(45deg);
+      width: 14px; height: 14px; background: #16b378;
+    }
+  </style>
+</head>
+<body>
+<div class="chrome">
+
+  <!-- Chrome bar -->
+  <div class="chrome-bar">
+    <div class="chrome-dot r"></div>
+    <div class="chrome-dot y"></div>
+    <div class="chrome-dot g"></div>
+    <div class="url-bar">
+      <span class="lock">🔒</span>
+      grist.example.org/o/docs/c2hyndg6fd2C/meswidgets/p/20
+    </div>
+    <div class="ext-icon-btn">G</div>
+  </div>
+
+  <!-- Page -->
+  <div class="page">
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <div class="sb-org">
+        <div class="sb-org-logo">M</div>
+        <div class="sb-org-name">@monorga</div>
+      </div>
+      <div class="sb-btn">
+        Ajouter
+        <div class="sb-btn-plus">+</div>
+      </div>
+      <div class="sb-item"><span class="sb-emoji">📋</span>Publipostage</div>
+      <div class="sb-item"><span class="sb-emoji">📊</span>Tableaux croisés</div>
+      <div class="sb-item active"><span class="sb-emoji">📅</span>Gestion de projet</div>
+      <div class="sb-item"><span class="sb-emoji">🔐</span>Gestion des Accès</div>
+      <div class="sb-item"><span class="sb-emoji">📥</span>Import xlsx CSV JSON</div>
+    </div>
+
+    <!-- Main -->
+    <div class="main">
+      <div class="breadcrumb">Mes widgets / meswidgets / <b>Gestion de projet</b></div>
+      <div class="doc-title">📅 Gestion de Projet</div>
+      <div class="doc-sub">Organisez et suivez vos tâches avec le tableau Kanban ou la vue tableau</div>
+
+      <div class="tabs">
+        <div class="tab active">📅 Calendrier</div>
+        <div class="tab">📋 Kanban</div>
+        <div class="tab">📊 Tableau</div>
+        <div class="tab">📈 Gantt</div>
+        <div class="tab">🎨 Templates</div>
+        <div class="tab">📊 Stats</div>
+      </div>
+
+      <div class="stats">
+        <div class="stat"><div><div class="stat-label">Total</div><div class="stat-value">6</div></div><div class="stat-emoji">📋</div></div>
+        <div class="stat"><div><div class="stat-label">À faire</div><div class="stat-value">5</div></div><div class="stat-emoji">📝</div></div>
+        <div class="stat"><div><div class="stat-label">En cours</div><div class="stat-value">1</div></div><div class="stat-emoji">⏳</div></div>
+        <div class="stat"><div><div class="stat-label">Terminés</div><div class="stat-value">0</div></div><div class="stat-emoji">✅</div></div>
+      </div>
+
+      <div class="calendar-stub">— Vue calendrier du widget —</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Callout -->
+<div class="callout">Cliquez ici pour configurer ↗</div>
+
+<!-- Popup -->
+<div class="popup-anchor">
+  <div class="popup-arrow"></div>
+  <div class="popup">
+
+    <div class="pop-header">
+      <div class="pop-logo">G</div>
+      <div>
+        <div class="pop-title">Grist Widget Bridge</div>
+        <div class="pop-sub">Débloque CORS &amp; localStorage</div>
+      </div>
+    </div>
+
+    <div class="status-card">
+      <div class="status-line">
+        <div class="status-dot"></div>
+        <span class="status-text">Instance Grist active</span>
+      </div>
+      <div class="status-url">https://grist.example.org/o/docs/c2hyndg6fd2C/meswidgets/p/20</div>
+    </div>
+
+    <button class="btn-secondary">− Retirer cet onglet de la config</button>
+
+    <div class="section-title">Adresses configurées</div>
+    <div class="url-list">
+      <div class="url-item grist">
+        <span class="badge">Grist</span>
+        <span class="u">https://grist.example.org</span>
+        <span class="x">×</span>
+      </div>
+      <div class="url-item widget">
+        <span class="badge">Widget</span>
+        <span class="u">https://isaytoo.github.io/*</span>
+        <span class="x">×</span>
+      </div>
+      <div class="url-item widget">
+        <span class="badge">Widget</span>
+        <span class="u">https://gristlabs.github.io/*</span>
+        <span class="x">×</span>
+      </div>
+    </div>
+
+    <div class="footer-row">
+      <div class="ghost">↻ Recharger l'onglet</div>
+      <div class="ghost">⚙ Options</div>
+    </div>
+    <div class="version">Grist Widget Bridge · v2.0</div>
+
+  </div>
+</div>
+
+</body>
+</html>

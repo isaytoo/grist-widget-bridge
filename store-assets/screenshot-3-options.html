@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Screenshot 3 — Configuration avancée</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      width: 1280px; height: 800px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      color: #e2e8f0;
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      padding: 40px;
+      overflow: hidden;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    .card {
+      background: rgba(255,255,255,.04);
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 18px;
+      padding: 36px;
+      width: 720px;
+      box-shadow: 0 30px 70px rgba(0,0,0,.4);
+    }
+
+    .header { display: flex; align-items: center; gap: 14px; margin-bottom: 24px; }
+    .logo {
+      width: 44px; height: 44px;
+      background: #16b378; border-radius: 11px;
+      display: flex; align-items: center; justify-content: center;
+      color: #fff; font-weight: 700; font-size: 20px;
+    }
+    .title { font-size: 18px; font-weight: 600; color: #fff; }
+    .sub   { font-size: 13px; color: #94a3b8; }
+
+    .lead {
+      font-size: 13px; color: #94a3b8; line-height: 1.6;
+      margin-bottom: 22px;
+    }
+    .lead b { color: #fff; font-weight: 600; }
+
+    .section-title {
+      font-size: 12px; font-weight: 600; text-transform: uppercase;
+      letter-spacing: .08em; color: #94a3b8; margin: 20px 0 8px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .dot-grist  { width: 10px; height: 10px; border-radius: 50%; background: #16b378; }
+    .dot-widget { width: 10px; height: 10px; border-radius: 50%; background: #f97316; }
+
+    .desc { font-size: 12px; color: #94a3b8; margin-bottom: 12px; }
+    .desc code { background: rgba(255,255,255,.06); padding: 1px 6px; border-radius: 4px; font-family: ui-monospace, monospace; color: #cbd5e1; font-size: 11px; }
+
+    .url-list { display: flex; flex-direction: column; gap: 6px; }
+    .url-item {
+      display: flex; align-items: center; gap: 10px;
+      background: rgba(255,255,255,.04);
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 8px;
+      padding: 9px 14px;
+      font-size: 13px;
+      font-family: ui-monospace, monospace;
+      color: #e2e8f0;
+    }
+    .url-item.grist  { border-color: rgba(22,179,120,.4); }
+    .url-item.widget { border-color: rgba(249,115,22,.4); }
+    .url-item .u  { flex: 1; }
+    .url-item .x  { color: #64748b; font-size: 16px; }
+
+    .add-row { display: flex; gap: 10px; margin-top: 12px; }
+    .add-input {
+      flex: 1; padding: 11px 14px;
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 8px;
+      background: rgba(0,0,0,.25);
+      color: #94a3b8;
+      font-size: 13px;
+      font-family: ui-monospace, monospace;
+    }
+    .btn {
+      padding: 10px 18px; border-radius: 8px;
+      font-size: 13px; font-weight: 600;
+      display: flex; align-items: center; gap: 6px;
+      color: #fff;
+    }
+    .btn.primary { background: #16b378; }
+    .btn.warm    { background: #f97316; }
+
+    hr { border: none; border-top: 1px solid rgba(255,255,255,.08); margin: 24px 0; }
+
+    .info {
+      margin-top: 20px;
+      padding: 12px 14px;
+      background: rgba(22,179,120,.08);
+      border: 1px solid rgba(22,179,120,.2);
+      border-radius: 8px;
+      font-size: 12px; color: #94a3b8; line-height: 1.5;
+    }
+    .info b { color: #4ade80; }
+  </style>
+</head>
+<body>
+  <div class="card">
+
+    <div class="header">
+      <div class="logo">G</div>
+      <div>
+        <div class="title">Grist Widget Bridge</div>
+        <div class="sub">Configuration avancée</div>
+      </div>
+    </div>
+
+    <p class="lead">
+      Cette extension fonctionne avec <b>n'importe quelle instance Grist</b>
+      et <b>n'importe quel hébergeur de widget</b>. Configurez ici les
+      adresses concernées — l'extension n'agit que sur ces URLs.
+    </p>
+
+    <div class="section-title"><div class="dot-grist"></div>Instances Grist</div>
+    <p class="desc">Les serveurs Grist où les widgets sont chargés. L'extension y débloque le CORS de l'API.</p>
+
+    <div class="url-list">
+      <div class="url-item grist"><span class="u">https://docs.getgrist.com</span><span class="x">×</span></div>
+      <div class="url-item grist"><span class="u">https://grist.monorga.fr</span><span class="x">×</span></div>
+      <div class="url-item grist"><span class="u">https://grist.exemple.fr</span><span class="x">×</span></div>
+    </div>
+
+    <div class="add-row">
+      <div class="add-input">https://grist.autre-instance.org</div>
+      <button class="btn primary">+ Ajouter</button>
+    </div>
+
+    <hr>
+
+    <div class="section-title"><div class="dot-widget"></div>Widgets autorisés</div>
+    <p class="desc">Les domaines des widgets personnalisés. L'extension y corrige <code>localStorage</code> et autorise le pont d'upload.</p>
+
+    <div class="url-list">
+      <div class="url-item widget"><span class="u">https://isaytoo.github.io/*</span><span class="x">×</span></div>
+      <div class="url-item widget"><span class="u">https://gristlabs.github.io/*</span><span class="x">×</span></div>
+    </div>
+
+    <div class="add-row">
+      <div class="add-input">https://votre-widget-host.fr/</div>
+      <button class="btn warm">+ Ajouter</button>
+    </div>
+
+    <div class="info">
+      <b>Astuce :</b> vous pouvez ajouter des adresses plus rapidement via
+      l'icône de l'extension dans la barre d'outils — un clic « + Comme instance Grist »
+      ou « + Comme widget » suffit.
+    </div>
+  </div>
+</body>
+</html>

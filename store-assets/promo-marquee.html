@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Grist Widget Bridge — Marquee 1400×560</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      width: 1400px; height: 560px;
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #16213e 100%);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      overflow: hidden; position: relative;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    .bg-circle { position: absolute; border-radius: 50%; opacity: .12; filter: blur(2px); }
+    .bg-circle-1 { width: 700px; height: 700px; background: #16b378; top: -250px; right: -150px; }
+    .bg-circle-2 { width: 500px; height: 500px; background: #f97316; bottom: -200px; left: -150px; }
+
+    .container {
+      display: flex; align-items: center; justify-content: space-between;
+      width: 100%; padding: 0 80px;
+      position: relative; z-index: 1;
+    }
+
+    /* ── Texte ─────────────────────────────────────── */
+    .text-side { color: #fff; max-width: 700px; }
+
+    .logo-row {
+      display: flex; align-items: center; gap: 16px; margin-bottom: 28px;
+    }
+    .logo {
+      width: 64px; height: 64px;
+      background: #16b378; border-radius: 16px;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 32px;
+      box-shadow: 0 10px 30px rgba(22,179,120,.4);
+    }
+    .brand { font-size: 30px; font-weight: 700; }
+
+    h1 {
+      font-size: 56px; font-weight: 800;
+      margin-bottom: 22px; line-height: 1.05;
+    }
+    .accent {
+      background: linear-gradient(135deg, #16b378, #4ade80);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .accent-warm {
+      background: linear-gradient(135deg, #f97316, #fb923c);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    p.lead {
+      font-size: 20px; color: #cbd5e1;
+      line-height: 1.5; margin-bottom: 32px;
+    }
+
+    .features { display: flex; gap: 12px; flex-wrap: wrap; }
+    .feature {
+      display: flex; align-items: center; gap: 8px;
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.1);
+      padding: 10px 16px; border-radius: 30px;
+      font-size: 14px; color: #fff; font-weight: 500;
+    }
+    .check {
+      width: 18px; height: 18px; border-radius: 50%;
+      background: #16b378;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px; font-weight: 700; color: #fff;
+    }
+    .check.warm { background: #f97316; }
+
+    /* ── Mockup ─────────────────────────────────────── */
+    .visual-side { position: relative; }
+
+    .popup {
+      width: 320px;
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+      border-radius: 18px;
+      padding: 18px;
+      box-shadow: 0 30px 70px rgba(0,0,0,.5), 0 0 0 1px rgba(255,255,255,.1);
+      transform: perspective(1200px) rotateY(-8deg) rotateX(3deg);
+    }
+    .pop-header { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+    .pop-logo {
+      width: 38px; height: 38px;
+      background: #16b378; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      color: #fff; font-weight: 700; font-size: 18px;
+    }
+    .pop-title { font-size: 15px; font-weight: 600; color: #fff; }
+    .pop-sub   { font-size: 11px; color: #94a3b8; }
+
+    .status-card {
+      background: rgba(255,255,255,.05);
+      border: 1px solid rgba(255,255,255,.1);
+      border-radius: 12px;
+      padding: 12px;
+      margin-bottom: 14px;
+    }
+    .status-line { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+    .status-dot { width: 10px; height: 10px; border-radius: 50%; background: #16b378; box-shadow: 0 0 10px #16b378; }
+    .status-text { font-size: 13px; font-weight: 500; color: #fff; }
+    .status-url { font-size: 10px; color: #94a3b8; font-family: ui-monospace, monospace; word-break: break-all; }
+
+    .url-list { display: flex; flex-direction: column; gap: 5px; }
+    .url-item {
+      display: flex; align-items: center; gap: 8px;
+      background: rgba(255,255,255,.04);
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 7px;
+      padding: 6px 9px;
+      font-size: 10px;
+      font-family: ui-monospace, monospace;
+      color: #e2e8f0;
+    }
+    .url-item.grist  { border-color: rgba(22,179,120,.35); }
+    .url-item.widget { border-color: rgba(249,115,22,.35); }
+    .badge {
+      font-size: 8px; font-weight: 700; letter-spacing: .04em;
+      padding: 2px 5px; border-radius: 3px; text-transform: uppercase;
+    }
+    .badge.grist  { background: rgba(22,179,120,.2);  color: #4ade80; }
+    .badge.widget { background: rgba(249,115,22,.2);  color: #fb923c; }
+    .url-item .u  { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+    /* ── Float cards ──────────────────────────────── */
+    .float-card {
+      position: absolute;
+      background: rgba(15,23,42,.95);
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 14px;
+      padding: 12px 16px;
+      display: flex; align-items: center; gap: 12px;
+      box-shadow: 0 15px 40px rgba(0,0,0,.4);
+    }
+    .float-1 { top: -10px; right: -100px; }
+    .float-2 { bottom: 10px; left: -110px; }
+    .float-icon {
+      width: 38px; height: 38px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px;
+    }
+    .float-icon.green { background: rgba(22,179,120,.2); }
+    .float-icon.warm  { background: rgba(249,115,22,.2); }
+    .float-text { color: #fff; font-size: 13px; font-weight: 600; }
+    .float-sub  { color: #94a3b8; font-size: 11px; }
+  </style>
+</head>
+<body>
+  <div class="bg-circle bg-circle-1"></div>
+  <div class="bg-circle bg-circle-2"></div>
+
+  <div class="container">
+    <div class="text-side">
+      <div class="logo-row">
+        <div class="logo">G</div>
+        <div class="brand">Grist Widget Bridge</div>
+      </div>
+
+      <h1>Débloquez vos <span class="accent">widgets&nbsp;Grist</span><br>en <span class="accent-warm">un&nbsp;clic</span></h1>
+
+      <p class="lead">L'extension qui corrige CORS, localStorage et les uploads de pièces jointes — sur n'importe quelle instance Grist.</p>
+
+      <div class="features">
+        <div class="feature"><div class="check">✓</div>Multi-instances</div>
+        <div class="feature"><div class="check">✓</div>Aucun code à toucher</div>
+        <div class="feature"><div class="check warm">✓</div>Upload natif</div>
+        <div class="feature"><div class="check warm">✓</div>localStorage OK</div>
+      </div>
+    </div>
+
+    <div class="visual-side">
+
+      <div class="float-card float-1">
+        <div class="float-icon green">📎</div>
+        <div>
+          <div class="float-text">Upload OK</div>
+          <div class="float-sub">via session Grist</div>
+        </div>
+      </div>
+
+      <div class="popup">
+        <div class="pop-header">
+          <div class="pop-logo">G</div>
+          <div>
+            <div class="pop-title">Grist Widget Bridge</div>
+            <div class="pop-sub">Débloque CORS &amp; localStorage</div>
+          </div>
+        </div>
+
+        <div class="status-card">
+          <div class="status-line">
+            <div class="status-dot"></div>
+            <span class="status-text">Instance Grist active</span>
+          </div>
+          <div class="status-url">https://grist.example.org/o/docs/abc</div>
+        </div>
+
+        <div class="url-list">
+          <div class="url-item grist">
+            <span class="badge grist">Grist</span>
+            <span class="u">https://grist.example.org</span>
+          </div>
+          <div class="url-item widget">
+            <span class="badge widget">Widget</span>
+            <span class="u">https://isaytoo.github.io/*</span>
+          </div>
+          <div class="url-item widget">
+            <span class="badge widget">Widget</span>
+            <span class="u">https://gristlabs.github.io/*</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="float-card float-2">
+        <div class="float-icon warm">🔓</div>
+        <div>
+          <div class="float-text">CORS contourné</div>
+          <div class="float-sub">postMessage bridge</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</body>
+</html>
