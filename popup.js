@@ -154,13 +154,30 @@ function renderList() {
     div.dataset.url = url;
     div.dataset.kind = kind;
     const badgeLabel = kind === 'grist' ? 'Grist' : kind === 'widget' ? 'Widget' : 'API';
-    div.innerHTML = `
-      <span class="url-dot ok" title="Vérification…"></span>
-      <span class="badge">${badgeLabel}</span>
-      <span class="url" title="${esc(url)}">${esc(url)}</span>
-      <button type="button" aria-label="Supprimer">×</button>
-    `;
-    div.querySelector('button').addEventListener('click', () => removeUrl(kind, url));
+
+    const dot = document.createElement('span');
+    dot.className = 'url-dot ok';
+    dot.title = 'Vérification…';
+
+    const badge = document.createElement('span');
+    badge.className = 'badge';
+    badge.textContent = badgeLabel;
+
+    const spanUrl = document.createElement('span');
+    spanUrl.className = 'url';
+    spanUrl.title = url;
+    spanUrl.textContent = url;
+
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.setAttribute('aria-label', 'Supprimer');
+    btn.textContent = '×';
+    btn.addEventListener('click', () => removeUrl(kind, url));
+
+    div.appendChild(dot);
+    div.appendChild(badge);
+    div.appendChild(spanUrl);
+    div.appendChild(btn);
     list.appendChild(div);
   }
 

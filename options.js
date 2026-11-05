@@ -39,17 +39,29 @@ function renderList(kind, urls, containerId) {
   const list = $(containerId);
   list.innerHTML = '';
   if (!urls.length) {
-    list.innerHTML = `<div class="empty">Aucune adresse configurée</div>`;
+    const empty = document.createElement('div');
+    empty.className = 'empty';
+    empty.textContent = 'Aucune adresse configurée';
+    list.appendChild(empty);
     return;
   }
   urls.forEach((url, i) => {
     const div = document.createElement('div');
     div.className = `url-item ${kind}`;
-    div.innerHTML = `
-      <span class="url" title="${esc(url)}">${esc(url)}</span>
-      <button type="button" aria-label="Supprimer">×</button>
-    `;
-    div.querySelector('button').addEventListener('click', () => removeAt(kind, i));
+
+    const spanUrl = document.createElement('span');
+    spanUrl.className = 'url';
+    spanUrl.title = url;
+    spanUrl.textContent = url;
+
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.setAttribute('aria-label', 'Supprimer');
+    btn.textContent = '×';
+    btn.addEventListener('click', () => removeAt(kind, i));
+
+    div.appendChild(spanUrl);
+    div.appendChild(btn);
     list.appendChild(div);
   });
 }
